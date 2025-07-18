@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Academic Companion</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="pomo_style_dup.css">
+</head>
+<body>
+<body class="light-theme">  <!-- for light mode -->
+<body class="dark-theme">   <!-- for dark mode -->
+    <div class="container-fluid py-4">
+        <div class="row">
+            <!-- Pomodoro Timer Section -->
+            <div class="col-lg-4 mb-4">
+                <div class="card pomodoro-card h-100">
+                    <div class="card-header text-center">
+                        <h4 class="mb-0">🍅 Pomodoro Timer</h4>
+                    </div>
+                    <div class="card-body text-center">
+                        <!-- Timer Display with Progress Ring -->
+                        <div class="timer-container mb-4">
+                            <svg width="140" height="140" class="progress-ring">
+                                <circle cx="70" cy="70" r="60" stroke="#e9ecef" stroke-width="8" fill="none"/>
+                                <circle id="progressCircle" cx="70" cy="70" r="60" stroke="#4A90E2" stroke-width="8" 
+                                        fill="none" stroke-linecap="round" 
+                                        style="stroke-dasharray: 377; stroke-dashoffset: 377; transform: rotate(-90deg); transform-origin: 50% 50%; transition: stroke-dashoffset 1s ease;"/>
+                            </svg>
+                            <div class="timer-display" id="timerDisplay">25:00</div>
+                        </div>
+
+                        <!-- Timer Controls -->
+                        <div class="mb-3">
+                            <button id="pomodoroBtn" class="btn btn-success btn-lg" onclick="togglePomodoro()">
+                                ▶️ Start
+                            </button>
+                            <button class="btn btn-secondary ms-2" onclick="resetPomodoro()">
+                                🔄 Reset
+                            </button>
+                            <button class="btn btn-warning ms-2" onclick="skipTimer()">
+                                ⏭️ Skip
+                            </button>
+                        </div>
+
+                        <!-- Quick Timer Presets -->
+                        <div class="mb-3">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button class="btn btn-outline-primary" onclick="setTimer(15)">15m</button>
+                                <button class="btn btn-outline-primary" onclick="setTimer(25)">25m</button>
+                                <button class="btn btn-outline-primary" onclick="setTimer(30)">30m</button>
+                                <button class="btn btn-outline-primary" onclick="setTimer(45)">45m</button>
+                            </div>
+                        </div>
+
+                        <!-- Custom Timer -->
+                        <div class="input-group input-group-sm">
+                            <input type="number" id="customMinutes" class="form-control" placeholder="Custom minutes" min="1" max="120">
+                            <button class="btn btn-outline-secondary" onclick="setCustomTimer()">Set</button>
+                        </div>
+
+                        <!-- Status Display -->
+                        <div class="mt-3 p-2 rounded" style="background-color: var(--bg-secondary) ;">
+                            <small id="pomodoroStatus" class="text-muted">Ready to focus! Click Start to begin.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div class="col-lg-8 mb-4">
+                <!-- Enhanced Weekly Chart -->
+                <div class="card analytics-card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">📈 Productivity Analytics</h4>
+                        <div class="analytics-controls">
+                            <button onclick="exportProgress()" class="btn btn-outline-primary btn-sm">📊 Export</button>
+                            <button onclick="resetProgress()" class="btn btn-outline-primary btn-sm">🔄 Reset</button>
+                        </div>
+			<div class="text-end mb-3">
+  				<button class="btn btn-outline-primary" onclick="toggleTheme()">🌓 Toggle Theme</button>
+			</div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Stats Summary -->
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <div class="stat-number" id="totalSessions">0</div>
+                                    <div class="stat-label">Total Sessions</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <div class="stat-number" id="totalFocusTime">0</div>
+                                    <div class="stat-label">Focus Hours</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <div class="stat-number" id="averageSession">0</div>
+                                    <div class="stat-label">Avg Session (min)</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <div class="stat-number" id="todayFocus">0</div>
+                                    <div class="stat-label">Today (min)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Charts Container -->
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="chart-container">
+                                    <canvas id="progressChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="chart-container">
+                                    <canvas id="distributionChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Additional Analytics -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="chart-container" style="height: 200px;">
+                                    <canvas id="weeklyTrendChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalTitle">Confirm Action</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="confirmModalBody">
+                    Are you sure you want to perform this action?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="confirmModalBtn">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="pomo_script.js"></script>
+</body>
+</html>
