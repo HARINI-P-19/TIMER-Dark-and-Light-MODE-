@@ -49,29 +49,29 @@
 }
 /* === LIGHT THEME === */
 .light-theme {
-  --primary-bg: #f8f9fa;
+  --primary-bg: #faf9ff;
   --secondary-bg: #ffffff;
   --tertiary-bg: rgba(108, 117, 125, 0.1);
   --quaternary-bg: rgba(108, 117, 125, 0.05);
-  
+     
   --surface-primary: #ffffff;
-  --surface-secondary: #f8f9fa;
+  --surface-secondary: #faf9ff;
   --surface-tertiary: #e9ecef;
-  
+     
   /* BLACK TEXT FOR LIGHT MODE */
   --text-primary: #212529;
   --text-secondary: #495057;
   --text-tertiary: #6c757d;
   --text-quaternary: #adb5bd;
-  
-  --accent-primary: #6f42c1;
+     
+  --accent-primary: #c084fc;
   --accent-secondary: #8b5cf6;
-  --accent-tertiary: #c084fc;
-  
-  --border-primary: rgba(111, 66, 193, 0.2);
+  --accent-tertiary: #d8b4fe;
+     
+  --border-primary: rgba(192, 132, 252, 0.2);
   --border-secondary: #dee2e6;
   --border-tertiary: #e9ecef;
-  
+     
   --success: #198754;
   --warning: #fd7e14;
   --error: #dc3545;
